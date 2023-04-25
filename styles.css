@@ -85,10 +85,16 @@ ul li a:hover {
     background: var(--primary-color-dark);
 }
 
-footer {
+.criador {
     font-weight: 500;
     font-size: 12px;
     padding-bottom: 20px;
+    border-top: solid black 2px;
+    border-bottom: solid black 2px;
+    border-radius: 9px;
+    margin-left: 30px;
+    margin-right: 30px;
+    padding: 1px;
 }
 
 footer:hover {
