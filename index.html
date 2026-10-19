@@ -295,6 +295,11 @@
      (um círculo abrindo a partir do botão). Evita ver a tela mudar "por partes" no iPhone. */
   ::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
   ::view-transition-new(root) { z-index: 2; }
+  /* Navegador do Instagram/Facebook (ou sem View Transition): uma camada com a cor do novo tema
+     cobre a tela, o tema troca por baixo e ela some — esconde a tela sendo pintada por partes. */
+  .veu { position: fixed; inset: 0; z-index: 100; pointer-events: none; opacity: 0; will-change: opacity; transition: opacity .16s ease-out; }
+  .veu.cobre { opacity: 1; }
+  .veu.some { transition-duration: .32s; transition-timing-function: ease-in; }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
     .revela, .ass-letras span, .ass-foto { opacity: 1 !important; translate: none !important; }
@@ -437,9 +442,34 @@
     // devolve as transições depois que a nova cor já foi pintada
     requestAnimationFrame(function () { requestAnimationFrame(function () { raiz.classList.remove('trocando-tema'); }); });
   }
+  // dentro do app do Instagram/Facebook o navegador é outro (mais lento para redesenhar)
+  var navegadorDeApp = /Instagram|FBAN|FBAV|FB_IAB/i.test(navigator.userAgent);
+  var ocupado = false;
+  function trocarComVeu() {
+    if (ocupado) return;
+    ocupado = true;
+    var veu = document.createElement('div');
+    veu.className = 'veu';
+    veu.style.background = cores[raiz.dataset.theme === 'dark' ? 'light' : 'dark'];
+    document.body.appendChild(veu);
+    requestAnimationFrame(function () {
+      veu.classList.add('cobre');
+      setTimeout(function () {
+        trocar(); // troca escondida atrás da camada
+        // dá tempo para o navegador terminar de pintar antes de revelar
+        requestAnimationFrame(function () { requestAnimationFrame(function () {
+          setTimeout(function () {
+            veu.classList.add('some'); veu.classList.remove('cobre');
+            setTimeout(function () { veu.remove(); ocupado = false; }, 360);
+          }, 90);
+        }); });
+      }, 170);
+    });
+  }
   botao.addEventListener('click', function () {
     var calmoAgora = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!document.startViewTransition || calmoAgora) { trocar(); return; }
+    if (calmoAgora) { trocar(); return; }
+    if (navegadorDeApp || !document.startViewTransition) { trocarComVeu(); return; }
     var r = botao.getBoundingClientRect();
     var x = r.left + r.width / 2, y = r.top + r.height / 2;
     var raio = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
