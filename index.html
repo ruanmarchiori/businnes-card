@@ -67,7 +67,9 @@
 
   * { box-sizing: border-box; }
   /* cor também no html: é a que aparece ao puxar a página para atualizar */
-  html { -webkit-text-size-adjust: 100%; background: var(--fundo); }
+  /* touch-action: o toque responde na hora (sem esperar para ver se é toque duplo/zoom) */
+  html { -webkit-text-size-adjust: 100%; background: var(--fundo); touch-action: manipulation; }
+  a, button { touch-action: manipulation; }
   body {
     margin: 0;
     min-height: 100svh;
