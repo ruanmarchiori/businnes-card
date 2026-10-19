@@ -1,47 +1,469 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-  <head>
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title> Ruan Marchiori - Cartão de visita digital</title>
-<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
-      <link rel="stylesheet" href="styles.css">
-  </head>
-  <body class="">
-    <div class="container">
-   <img
-    class="avatar"
-    src="https://avatars.githubusercontent.com/u/131534354?v=4"
-    alt="Profile picture: Ruan Marchiori">
-      <h1>Ruan Marchiori</h1>
-      <p class="subtitle">Meu cartão de visita</p>
-      <ul>
-         <li>
-          <a
-          href="https://wa.link/lt4ps1"
-          target="_blank"><i class="fa-brands fa-instagram">&nbsp;</i>WhatsApp</a>
-        </li>
-        <li>
-          <a
-          href="https://www.instagram.com/marchiori_ruan/"
-          target="_blank"><i class="fa-brands fa-instagram">&nbsp;</i>Instagram</a>
-        </li>
-        <li>
-          <a
-          href="https://www.facebook.com/ruancardozo.marchiori"
-          target="_blank"><i class="fa-brands fa-facebook"></i>&nbsp;Facebook</a>
-        </li>
-         <li>
-          <a
-          href="https://www.linkedin.com/in/ruan-cardozo-marchiori-763720272/"
-          target="_blank"><i class="fa-brands fa-linkedin"></i>&nbsp;LinkedIn</a>
-        </li>
-      </ul>
-        <footer>
-        <div class="criador">Adapter by: Ruan Cardozo Marchiori</div>
-      </footer>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ruan Marchiori</title>
+<meta name="description" content="Ruan Marchiori — links, projetos e redes.">
+<meta name="theme-color" content="#f6efdc" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d1d2b" media="(prefers-color-scheme: dark)">
+<meta property="og:title" content="Ruan Marchiori">
+<meta property="og:description" content="Links, projetos e redes.">
+<meta property="og:image" content="foto-ruan.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+  // Tema antes de pintar a página (evita piscar): salvo > sistema.
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem('bio-tema'); } catch (e) {}
+    if (t !== 'dark' && t !== 'light') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.dataset.theme = t;
+  })();
+</script>
+<style>
+  /* ---------- Cores (claro = toggle de sol; escuro = toggle de lua) ---------- */
+  :root {
+    --fundo: #f6efdc;
+    --fundo-2: #efe3c2;
+    --tinta: #1d1a14;
+    --tinta-2: #5d5544;
+    --acento: #ff5a36;          /* laranja de destaque */
+    --acento-tinta: #ffffff;
+    --vidro: rgba(255, 255, 255, .42);
+    --vidro-borda: rgba(255, 255, 255, .75);
+    --vidro-brilho: rgba(255, 255, 255, .9);
+    --sombra: 0 18px 40px -18px rgba(80, 52, 10, .35);
+    --mancha-1: #ffc94d;
+    --mancha-2: #ff8a4c;
+    --mancha-3: #f3b2ff;
+    --letra: #1e3f66;          /* azul-marinho das letras gigantes */
+    --estrelas: 0;
+    color-scheme: light;
+  }
+  :root[data-theme="dark"] {
+    --fundo: #0d1d2b;
+    --fundo-2: #132a3d;
+    --tinta: #f2f5f8;
+    --tinta-2: #a3b3c2;
+    --vidro: rgba(255, 255, 255, .07);
+    --vidro-borda: rgba(255, 255, 255, .16);
+    --vidro-brilho: rgba(255, 255, 255, .28);
+    --sombra: 0 22px 50px -20px rgba(0, 0, 0, .7);
+    --mancha-1: #3b4fe0;          /* azul do telão da foto */
+    --mancha-2: #ff5a36;
+    --mancha-3: #6b3fd6;
+    --letra: #dfe7ef;
+    --estrelas: 1;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    min-height: 100svh;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background: var(--fundo);
+    color: var(--tinta);
+    overflow-x: hidden;
+    transition: background-color .6s ease, color .6s ease;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------- Fundo: manchas de luz (dão o que o vidro "desfocar") + estrelas ---------- */
+  .ambiente { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .mancha { position: absolute; border-radius: 50%; filter: blur(60px); opacity: .55; transition: background-color .8s ease; }
+  .mancha.m1 { width: 75vw; height: 75vw; max-width: 520px; max-height: 520px; background: var(--mancha-1); top: 28%; left: -30%; animation: flutua 16s ease-in-out infinite; }
+  .mancha.m2 { width: 60vw; height: 60vw; max-width: 420px; max-height: 420px; background: var(--mancha-2); top: 52%; right: -28%; animation: flutua 19s ease-in-out infinite reverse; }
+  .mancha.m3 { width: 55vw; height: 55vw; max-width: 380px; max-height: 380px; background: var(--mancha-3); bottom: -12%; left: 10%; opacity: .35; animation: flutua 22s ease-in-out infinite; }
+  @keyframes flutua { 50% { transform: translate(6%, -5%) scale(1.06); } }
+  .ceu { position: absolute; inset: 0; opacity: var(--estrelas); transition: opacity .8s ease; }
+  .ceu i { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: #fff; animation: pisca 3.5s ease-in-out infinite; }
+  @keyframes pisca { 50% { opacity: .25; } }
+
+  .pagina {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 440px; margin: 0 auto;
+    padding: max(14px, env(safe-area-inset-top)) 16px max(28px, env(safe-area-inset-bottom));
+    display: flex; flex-direction: column; gap: 18px;
+  }
+
+  /* ---------- Barra do topo ---------- */
+  /* acima do card da foto (que sobe por trás da barra para a cabeça sair do quadro) */
+  .topo { position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; min-height: 48px; }
+  .marca { font-weight: 800; letter-spacing: -.03em; font-size: 1.4rem; }
+  .marca span { color: var(--acento); display: inline-block; animation: ponto 2.4s ease-in-out infinite; }
+  @keyframes ponto { 0%, 70%, 100% { transform: none; } 80% { transform: translateY(-5px) scale(1.3); } 90% { transform: translateY(1px); } }
+
+  /* Toggle sol/montanhas ↔ lua/estrelas */
+  /* o botão tem 44px de altura (área de toque); a pista visível é menor */
+  .tema {
+    position: relative; width: 64px; height: 44px; padding: 0; border: 0; background: none; cursor: pointer;
+    flex-shrink: 0; display: grid; place-items: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tema .pista {
+    position: relative; display: block; width: 64px; height: 32px; border-radius: 99px; overflow: hidden;
+    background: linear-gradient(180deg, #ffd85c, #f6c443);
+    box-shadow: inset 0 2px 5px rgba(120, 70, 0, .25), 0 5px 12px -7px rgba(160, 100, 0, .6);
+    transition: background .6s ease, box-shadow .6s ease, transform .2s ease;
+  }
+  .tema:active .pista { transform: scale(.94); }
+  .tema:focus-visible { outline: none; }
+  .tema:focus-visible .pista { outline: 3px solid var(--acento); outline-offset: 3px; }
+  :root[data-theme="dark"] .tema .pista { background: linear-gradient(180deg, #11263a, #1a3550); box-shadow: inset 0 2px 6px rgba(0,0,0,.55), 0 5px 12px -7px rgba(0,0,0,.8); }
+  .tema svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .tema .sol { transition: transform .6s cubic-bezier(.5,1.6,.5,1), opacity .4s; transform-origin: 22px 20px; }
+  .tema .lua, .tema .estrela { opacity: 0; transition: opacity .5s ease .1s, transform .6s ease; }
+  .tema .lua { transform: translateY(8px); }
+  .tema .serra-clara { transition: opacity .6s ease; }
+  .tema .serra-escura { opacity: 0; transition: opacity .6s ease; }
+  :root[data-theme="dark"] .tema .sol { opacity: 0; transform: translateY(14px) scale(.6); }
+  :root[data-theme="dark"] .tema .lua { opacity: 1; transform: none; }
+  :root[data-theme="dark"] .tema .estrela { opacity: 1; }
+  :root[data-theme="dark"] .tema .serra-clara { opacity: 0; }
+  :root[data-theme="dark"] .tema .serra-escura { opacity: 1; }
+  .tema .bolinha {
+    position: absolute; top: 3px; left: 3px; width: 26px; height: 26px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff, #f3f0ea 70%);
+    box-shadow: 0 3px 8px rgba(0,0,0,.25);
+    transform: translateX(32px);
+    transition: transform .55s cubic-bezier(.6,1.5,.5,1);
+  }
+  :root[data-theme="dark"] .tema .bolinha { transform: translateX(0); }
+
+  /* ---------- Topo: foto (referência "Hiking Crew") ---------- */
+  /* card da foto: flutua (propriedade translate) e inclina com o mouse (transform) */
+  .hero-wrap {
+    position: relative; padding-bottom: 16px;
+    animation: flutuar 6s ease-in-out 1s infinite;
+    transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform .4s ease-out;
+  }
+  @keyframes flutuar { 50% { translate: 0 -7px; } }
+  /* Efeito "saindo do quadro": a foto fica dentro da moldura (que começa em --topo) e a
+     versão recortada (sem fundo) aparece só ACIMA da moldura — cabelo e testa passam por
+     cima da borda. As duas imagens ocupam a mesma caixa, então se encaixam exatamente.
+     Medidas em cqw (% da largura do card). A foto é ampliada e deslocada para a esquerda,
+     cortando os 21% da esquerda (onde havia outra pessoa): 126.6cqw de largura, 158.25cqw
+     de altura; a moldura começa em 28% da foto (44.3cqw) e vai até o fim dela (violão inteiro). */
+  .hero {
+    --topo: 44.3cqw;
+    container-type: inline-size;
+    position: relative; aspect-ratio: 100 / 158.25; isolation: isolate;
+    margin-top: -22%; /* o espaço vazio acima da cabeça sobe por trás da barra do topo */
+    pointer-events: none; /* só decorativo: não pode roubar o toque do botão de tema */
+    animation: aparece .8s ease both;
+  }
+  /* o card entra inteiro (foto e cabeça juntas), nunca com a cabeça cortada */
+  @keyframes aparece { from { opacity: 0; transform: translateY(14px) scale(.98); } }
+  .moldura { position: absolute; left: 0; right: 0; bottom: 0; top: var(--topo); border-radius: 34px; background: #111; box-shadow: var(--sombra); }
+  .foto-fundo, .sai { position: absolute; top: 0; left: -26.6cqw; width: 126.6cqw; height: 158.25cqw; }
+  .hero img { display: block; width: 126.6cqw; height: 158.25cqw; object-fit: cover; }
+  /* recorte da moldura em coordenadas da foto: 28% em cima, 21% à esquerda, 5.85% embaixo */
+  .foto-fundo { clip-path: inset(28% 0 0 21% round 34px); }
+  .hero::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; top: var(--topo); border-radius: 34px; background: linear-gradient(180deg, rgba(17,17,17,0) 72%, rgba(17,17,17,.4) 100%); z-index: 1; pointer-events: none; }
+  .sai { z-index: 2; clip-path: inset(0 0 calc(100% - 28% - 1px) 21%); pointer-events: none; }
+  @keyframes sobe { from { opacity: 0; transform: translateY(14px); } }
+  /* aba escura "recortada" na borda de baixo da foto (o anel da cor do fundo faz o recorte) */
+  .aba {
+    position: absolute; z-index: 3; left: 0; bottom: 0; /* à esquerda: cobre o canto da foto onde havia outra pessoa */ display: flex; align-items: center; gap: 12px;
+    padding: 10px 12px 10px 16px; border-radius: 24px; background: #121212; color: #fff;
+    box-shadow: 0 0 0 6px var(--fundo); transition: box-shadow .6s ease;
+    animation: sobe .7s cubic-bezier(.2,.8,.2,1) .6s both;
+  }
+  .aba-texto { display: flex; flex-direction: column; line-height: 1.15; }
+  .aba-texto small { font-size: .62rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--acento); }
+  .aba-texto b { font-size: .9rem; font-weight: 700; }
+  /* nome e subtítulo logo abaixo da foto (a foto fica livre, com o violão inteiro) */
+  .apresentacao { padding: 2px 4px 0; }
+  /* nome com um brilho laranja que passa de tempos em tempos */
+  .apresentacao h1 {
+    margin: 0; font-size: clamp(2rem, 10vw, 2.6rem); line-height: 1.05; letter-spacing: -.035em; font-weight: 800;
+    background: linear-gradient(100deg, var(--tinta) 0 42%, var(--acento) 50%, var(--tinta) 58% 100%);
+    background-size: 260% 100%; background-position: 100% 0;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: brilho-texto 5s ease-in-out 1.2s infinite;
+  }
+  @keyframes brilho-texto { 0% { background-position: 100% 0; } 45%, 100% { background-position: 0 0; } }
+  .apresentacao p { margin: 8px 0 0; font-size: .95rem; color: var(--tinta-2); }
+  .bolhas { display: flex; flex-shrink: 0; }
+  .bolhas span { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; margin-left: -8px; border: 2px solid #121212; color: #fff; font-size: .8rem; }
+  .bolhas span { animation: pula 2.8s ease-in-out infinite; }
+  .bolhas span:nth-child(2) { animation-delay: .15s; }
+  .bolhas span:nth-child(3) { animation-delay: .3s; }
+  @keyframes pula { 0%, 55%, 100% { transform: none; } 65% { transform: translateY(-7px); } 75% { transform: translateY(1px); } }
+  .bolhas span:nth-child(1) { background: #3b4fe0; } /* música */
+  .bolhas span:nth-child(2) { background: #2b2925; } /* web */
+  .bolhas span:nth-child(3) { background: #ff5a36; } /* enfermagem */
+
+  /* ---------- Links: cards de vidro ---------- */
+  .secao-titulo { margin: 6px 4px -6px; font-size: .74rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--tinta-2); }
+  .links { display: flex; flex-direction: column; gap: 12px; }
+  .vidro {
+    position: relative; overflow: hidden;
+    background: var(--vidro);
+    border: 1px solid var(--vidro-borda);
+    -webkit-backdrop-filter: blur(22px) saturate(170%); backdrop-filter: blur(22px) saturate(170%);
+    box-shadow: var(--sombra), inset 0 1px 0 var(--vidro-brilho);
+  }
+  .card-link {
+    display: flex; align-items: center; gap: 14px;
+    min-height: 76px; padding: 14px 14px 14px 14px; border-radius: 24px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* reflexo que passa sozinho pelo vidro, de tempos em tempos */
+  .card-link::before {
+    content: ''; position: absolute; top: 0; bottom: 0; left: -60%; width: 50%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,.35), transparent);
+    transform: skewX(-18deg); pointer-events: none;
+    animation: reflexo 5s ease-in-out 1.5s infinite;
+  }
+  .card-link:nth-child(2)::before { animation-delay: 2.1s; }
+  .card-link:nth-child(3)::before { animation-delay: 2.7s; }
+  .card-link:nth-child(4)::before { animation-delay: 3.3s; }
+  @keyframes reflexo { 0% { left: -60%; } 22%, 100% { left: 130%; } }
+  .card-link:active { scale: .98; }
+  .card-link:focus-visible { outline: 3px solid var(--acento); outline-offset: 3px; }
+  .card-ico { width: 48px; height: 48px; border-radius: 15px; display: grid; place-items: center; flex-shrink: 0; color: #fff; }
+  .card-ico.insta { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285aeb 90%); }
+  .card-ico.atlas { background: #0b7fa8; overflow: hidden; }
+  .card-ico.agencia { border-radius: 50%; }
+  .card-ico.site { overflow: hidden; }
+  .card-ico.site img, .card-ico.agencia img { width: 100%; height: 100%; display: block; }
+  .card-ico.agencia img { width: 100%; height: 100%; border-radius: 50%; display: block; }
+  .card-texto { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .card-texto strong { font-size: 1rem; font-weight: 700; letter-spacing: -.01em; }
+  .card-texto small { font-size: .82rem; color: var(--tinta-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-seta { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; background: var(--tinta); color: var(--fundo); transition: transform .25s ease; }
+  .card-seta svg { animation: empurra 2.6s ease-in-out infinite; }
+  @keyframes empurra { 0%, 60%, 100% { transform: none; } 75% { transform: translateX(4px); } }
+  .card-link:hover .card-seta { transform: rotate(-45deg); }
+
+  /* ---------- Rodapé: foto lateral + letras gigantes (referência final) ---------- */
+  /* --p (−1..1) vem da rolagem: letras e foto andam em ritmos diferentes (paralaxe) */
+  .assinatura { position: relative; height: 380px; margin: 10px -16px 0; overflow: hidden; --p: 0; }
+  /* nome + áreas: no final da página, na mesma linha do © */
+  .fim { position: relative; z-index: 3; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-top: -34px; padding: 0 4px; }
+  .ass-texto { display: flex; flex-direction: column; gap: 2px; }
+  .ass-texto b { font-size: .92rem; font-weight: 800; letter-spacing: -.01em; }
+  .ass-texto span { font-size: .78rem; color: var(--tinta-2); }
+  /* letras empilhadas na lateral, saindo pela borda: uma cheia, uma vazada */
+  .ass-letras { position: absolute; z-index: 1; left: -14px; top: 26px; transform: translateY(calc(var(--p) * 40px)); display: flex; flex-direction: column; font-size: 10.5rem; line-height: .8; font-weight: 800; letter-spacing: -.06em; user-select: none; }
+  .ass-letras span:nth-child(1) { color: transparent; -webkit-text-stroke: 2.5px var(--letra); }
+  .ass-letras span:nth-child(2) { color: var(--letra); margin-left: 34px; }
+  .ass-letras span { display: block; opacity: 0; translate: -60px 0; transition: opacity .7s ease, translate .9s cubic-bezier(.2,.8,.2,1); }
+  .ass-letras span:nth-child(2) { transition-delay: .15s; }
+  .assinatura.visivel .ass-letras span { opacity: 1; translate: 0 0; }
+  .ass-foto {
+    position: absolute; z-index: 2; right: 0; bottom: 0; width: 74%; height: 100%; padding-top: 0;
+    object-fit: cover; object-position: 42% 100%; /* foto ancorada embaixo: sobra espaço acima da cabeça */
+    transform: translateY(calc(var(--p) * -14px));
+    opacity: 0; translate: 40px 0; transition: opacity .8s ease .2s, translate 1s cubic-bezier(.2,.8,.2,1) .2s;
+    /* como no 1º protótipo: a foto se dissolve pela esquerda (sobre as letras), em cima e embaixo */
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 34%), linear-gradient(180deg, transparent 0%, rgba(0,0,0,.55) 3%, #000 7%, #000 72%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(90deg, transparent 0%, #000 34%), linear-gradient(180deg, transparent 0%, rgba(0,0,0,.55) 3%, #000 7%, #000 72%, transparent 100%);
+    mask-composite: intersect;
+  }
+  .assinatura.visivel .ass-foto { opacity: 1; translate: 0 0; }
+  /* elementos que aparecem ao rolar */
+  .revela { opacity: 0; translate: 0 26px; transition: opacity .7s ease, translate .8s cubic-bezier(.2,.8,.2,1); transition-delay: var(--atraso, 0s); }
+  .revela.visivel { opacity: 1; translate: 0 0; }
+  .credito { margin: 0; font-size: .74rem; color: var(--tinta-2); white-space: nowrap; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
+    .revela, .ass-letras span, .ass-foto { opacity: 1 !important; translate: none !important; }
+  }
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .vidro { background: color-mix(in srgb, var(--fundo-2) 88%, transparent); }
+  }
+</style>
+</head>
+<body>
+  <div class="ambiente" aria-hidden="true">
+    <div class="ceu" id="ceu"></div>
+    <div class="mancha m1"></div>
+    <div class="mancha m2"></div>
+    <div class="mancha m3"></div>
+  </div>
+
+  <main class="pagina">
+    <header class="topo">
+      <span class="marca">ruan<span>.</span>marchiori</span>
+      <button class="tema" id="tema" type="button" role="switch" aria-checked="false" aria-label="Modo escuro">
+        <span class="pista">
+        <svg viewBox="0 0 84 40" preserveAspectRatio="none" aria-hidden="true">
+          <circle class="sol" cx="22" cy="17" r="9" fill="#fff8e1" />
+          <circle class="sol" cx="22" cy="17" r="14" fill="#fff8e1" opacity=".35" />
+          <path class="lua" d="M63 9a9 9 0 1 0 9 11.5A7 7 0 1 1 63 9z" fill="#f4f1ea" />
+          <g class="estrela" fill="#fff">
+            <circle cx="48" cy="9" r=".9" /><circle cx="56" cy="17" r=".7" /><circle cx="74" cy="8" r=".8" />
+            <circle cx="77" cy="24" r=".7" /><circle cx="51" cy="25" r=".6" />
+          </g>
+          <path class="serra-clara" d="M0 40V30l10-7 8 5 12-11 10 9 9-5 12 9 10-6 13 8v8z" fill="#e8a63a" />
+          <path class="serra-clara" d="M0 40v-5l14-6 12 5 14-8 14 9 12-5 18 7v3z" fill="#d98a25" />
+          <path class="serra-escura" d="M0 40V30l10-7 8 5 12-11 10 9 9-5 12 9 10-6 13 8v8z" fill="#5d7488" />
+          <path class="serra-escura" d="M0 40v-5l14-6 12 5 14-8 14 9 12-5 18 7v3z" fill="#3f566b" />
+        </svg>
+        <span class="bolinha"></span>
+        </span>
+      </button>
+    </header>
+
+    <!-- Topo: foto -->
+    <div class="hero-wrap">
+    <section class="hero" aria-label="Apresentação">
+      <div class="moldura" aria-hidden="true"></div>
+      <img class="foto-fundo" src="foto-ruan.jpg" alt="Ruan Marchiori sorrindo no palco, com um violão" width="1153" height="1440" fetchpriority="high">
+      <div class="sai" aria-hidden="true"><img src="foto-ruan-recorte.webp" alt="" width="720" height="899" fetchpriority="high"></div>
+    </section>
+    <div class="aba">
+      <span class="aba-texto"><small>Por aqui</small><b>Música · Web · Enfermagem</b></span>
+      <span class="bolhas" aria-hidden="true">
+        <span title="Música"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V5l12-2v13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span>
+        <span title="Web"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg></span>
+        <span title="Enfermagem"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7z"/></svg></span>
+      </span>
     </div>
-  </body>
+    </div>
+    <div class="apresentacao revela">
+      <h1>Ruan Marchiori</h1>
+      <p>Música, tecnologia, enfermagem e projetos.</p>
+    </div>
+
+    <!-- Links -->
+    <h2 class="secao-titulo revela" style="--atraso:.05s">Links</h2>
+    <nav class="links" aria-label="Links">
+      <a class="card-link vidro revela" style="--atraso:.12s" href="https://www.instagram.com/marchiori_ruan/" target="_blank" rel="noopener">
+        <span class="card-ico insta" aria-hidden="true">
+          <svg width="38" height="38" viewBox="2 2 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".9" fill="currentColor" stroke="none"/></svg>
+        </span>
+        <span class="card-texto">
+          <strong>Instagram</strong>
+          <small>@marchiori_ruan</small>
+        </span>
+        <span class="card-seta" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+      <a class="card-link vidro revela" style="--atraso:.24s" href="https://wa.me/5512991532879?text=Ol%C3%A1!%20Vim%20pelo%20link%20da%20bio." target="_blank" rel="noopener">
+        <span class="card-ico agencia" aria-hidden="true">
+          <img src="logo-webhub.svg" alt="" width="48" height="48">
+        </span>
+        <span class="card-texto">
+          <strong>Grupo WebHub</strong>
+          <small>WhatsApp</small>
+        </span>
+        <span class="card-seta" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+      <a class="card-link vidro revela" style="--atraso:.36s" href="https://grupowebhub.com.br/" target="_blank" rel="noopener">
+        <span class="card-ico site" aria-hidden="true">
+          <img src="logo-webhub-preto.svg" alt="" width="48" height="48">
+        </span>
+        <span class="card-texto">
+          <strong>Site do Grupo WebHub</strong>
+          <small>Conheça nossos trabalhos</small>
+        </span>
+        <span class="card-seta" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+      <a class="card-link vidro revela" style="--atraso:.48s" href="https://ruanmarchiori.github.io/atlas-anatomia/" target="_blank" rel="noopener">
+        <span class="card-ico atlas" aria-hidden="true">
+          <svg width="48" height="48" viewBox="-4 -19 520 520" fill="none" stroke="#f4f1ea" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"><circle cx="256" cy="128" r="58"/><path d="M256 190v222"/><path d="M256 236c-46 0-82 18-96 42M256 236c46 0 82 18 96 42"/><path d="M256 280c-40 0-70 14-82 34M256 280c40 0 70 14 82 34"/><path d="M256 324c-30 0-54 10-64 26M256 324c30 0 54 10 64 26"/><path d="M206 412h100"/></svg>
+        </span>
+        <span class="card-texto">
+          <strong>Atlas Anatomia</strong>
+          <small>Atlas 3D do corpo humano</small>
+        </span>
+        <span class="card-seta" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+    </nav>
+
+    <!-- Rodapé: foto lateral -->
+    <footer>
+      <div class="assinatura">
+        <div class="ass-letras" aria-hidden="true"><span>R</span><span>M</span></div>
+        <img class="ass-foto" src="foto-ruan-violao.jpg" alt="Ruan Marchiori tocando violão no palco" width="1152" height="1440" loading="lazy">
+      </div>
+      <div class="fim revela">
+        <div class="ass-texto"><b>Ruan Marchiori</b><span>Música · Web · Enfermagem</span></div>
+        <p class="credito">© <span id="ano">2026</span></p>
+      </div>
+    </footer>
+  </main>
+
+<script>
+  // Botão de tema
+  var raiz = document.documentElement;
+  var botao = document.getElementById('tema');
+  var cores = { light: '#f6efdc', dark: '#0d1d2b' };
+  function aplicar(t, salvar) {
+    raiz.dataset.theme = t;
+    botao.setAttribute('aria-checked', String(t === 'dark'));
+    document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) { m.setAttribute('content', cores[t]); });
+    if (salvar) { try { localStorage.setItem('bio-tema', t); } catch (e) {} }
+  }
+  aplicar(raiz.dataset.theme, false);
+  botao.addEventListener('click', function () {
+    aplicar(raiz.dataset.theme === 'dark' ? 'light' : 'dark', true);
+  });
+
+  // Estrelas do modo escuro
+  var ceu = document.getElementById('ceu');
+  for (var i = 0; i < 60; i++) {
+    var e = document.createElement('i');
+    var s = Math.random() < .2 ? 3 : 2;
+    e.style.cssText = 'left:' + (Math.random() * 100) + '%;top:' + (Math.random() * 100) + '%;width:' + s + 'px;height:' + s + 'px;animation-delay:' + (Math.random() * 3.5) + 's;opacity:' + (.4 + Math.random() * .6);
+    ceu.appendChild(e);
+  }
+
+  document.getElementById('ano').textContent = new Date().getFullYear();
+
+  // Aparecer ao rolar
+  var aRevelar = document.querySelectorAll('.revela, .assinatura');
+  if ('IntersectionObserver' in window) {
+    var obs = new IntersectionObserver(function (itens) {
+      itens.forEach(function (it) { if (it.isIntersecting) { it.target.classList.add('visivel'); obs.unobserve(it.target); } });
+    }, { threshold: .1 });
+    aRevelar.forEach(function (el) { obs.observe(el); });
+  } else aRevelar.forEach(function (el) { el.classList.add('visivel'); });
+
+  var calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Paralaxe do rodapé
+  var assinatura = document.querySelector('.assinatura');
+  var pedido = false;
+  function paralaxe() {
+    pedido = false;
+    var r = assinatura.getBoundingClientRect();
+    var p = (r.top + r.height / 2 - innerHeight / 2) / innerHeight;
+    assinatura.style.setProperty('--p', Math.max(-1, Math.min(1, p)).toFixed(3));
+  }
+  if (!calmo) {
+    addEventListener('scroll', function () { if (!pedido) { pedido = true; requestAnimationFrame(paralaxe); } }, { passive: true });
+    paralaxe();
+  }
+
+  // Inclinação do card da foto seguindo o mouse (só no computador)
+  var heroWrap = document.querySelector('.hero-wrap');
+  if (!calmo && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    heroWrap.addEventListener('pointermove', function (ev) {
+      var r = heroWrap.getBoundingClientRect();
+      var x = (ev.clientX - r.left) / r.width - .5, y = (ev.clientY - r.top) / r.height - .5;
+      heroWrap.style.setProperty('--ry', (x * 8).toFixed(2) + 'deg');
+      heroWrap.style.setProperty('--rx', (-y * 8).toFixed(2) + 'deg');
+    });
+    heroWrap.addEventListener('pointerleave', function () { heroWrap.style.setProperty('--rx', '0deg'); heroWrap.style.setProperty('--ry', '0deg'); });
+  }
+</script>
+</body>
 </html>

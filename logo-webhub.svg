@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 125 125">
+  <!-- Grupo WebHub — redesenho em vetor do logo (círculo dourado + "W" em diamante) -->
+  <defs>
+    <linearGradient id="ouro" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c46d12"/>
+      <stop offset=".5" stop-color="#a5621c"/>
+      <stop offset="1" stop-color="#4a2a0c"/>
+    </linearGradient>
+    <radialGradient id="brilho1" cx=".22" cy=".3" r=".5">
+      <stop offset="0" stop-color="#e2a24a" stop-opacity=".75"/>
+      <stop offset="1" stop-color="#e2a24a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="brilho2" cx=".85" cy=".85" r=".42">
+      <stop offset="0" stop-color="#eab562" stop-opacity=".85"/>
+      <stop offset="1" stop-color="#eab562" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="62.5" cy="62.5" r="62.5" fill="url(#ouro)"/>
+  <circle cx="62.5" cy="62.5" r="62.5" fill="url(#brilho1)"/>
+  <circle cx="62.5" cy="62.5" r="62.5" fill="url(#brilho2)"/>
+  <!-- um único traço contínuo: diagonais internas + contorno externo + barra do topo -->
+  <path transform="translate(62.5 62.5) scale(1.05) translate(-62.6 -63.5)"
+        d="M64 41 L78 59 L52.6 92 L26.3 59 L40 41 L85.4 41 L99.2 59 L73 92 L47.5 59 L61.5 41"
+        fill="none" stroke="#fdf8ec" stroke-width="9" stroke-linejoin="miter" stroke-miterlimit="8"/>
+</svg>
