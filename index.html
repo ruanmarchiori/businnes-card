@@ -32,6 +32,9 @@
     --acento: #ff5a36;          /* laranja de destaque */
     --acento-tinta: #ffffff;
     --vidro: rgba(255, 255, 255, .42);
+    --vidro-a: rgba(255, 255, 255, .66);
+    --vidro-b: rgba(255, 255, 255, .30);
+    --vidro-base: transparent;
     --vidro-borda: rgba(255, 255, 255, .75);
     --vidro-brilho: rgba(255, 255, 255, .9);
     --sombra: 0 18px 40px -18px rgba(80, 52, 10, .35);
@@ -48,6 +51,9 @@
     --tinta: #f2f5f8;
     --tinta-2: #a3b3c2;
     --vidro: rgba(255, 255, 255, .07);
+    --vidro-a: rgba(255, 255, 255, .12);
+    --vidro-b: rgba(255, 255, 255, .04);
+    --vidro-base: rgba(13, 29, 43, .62); /* esconde as estrelas atrás do card, como o desfoque fazia */
     --vidro-borda: rgba(255, 255, 255, .16);
     --vidro-brilho: rgba(255, 255, 255, .28);
     --sombra: 0 22px 50px -20px rgba(0, 0, 0, .7);
@@ -81,8 +87,12 @@
   .mancha.m3 { width: 55vw; height: 55vw; max-width: 380px; max-height: 380px; background: radial-gradient(closest-side, var(--mancha-3), transparent); bottom: -12%; left: 10%; opacity: .35; animation: flutua 22s ease-in-out infinite; }
   @keyframes flutua { 50% { transform: translate(6%, -5%) scale(1.06); } }
   .ceu { position: absolute; inset: 0; opacity: var(--estrelas); transition: opacity .8s ease; }
-  .ceu i { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: #fff; animation: pisca 3.5s ease-in-out infinite; }
-  @keyframes pisca { 50% { opacity: .25; } }
+  /* 2 camadas de estrelas (desenhadas uma vez em JS) que piscam alternadas: 2 animações só de
+     opacidade, feitas pela placa de vídeo. No modo claro ficam paradas. */
+  .ceu .camada { position: absolute; inset: 0; background-size: 100% 100%; will-change: opacity; animation: pisca 3.6s ease-in-out infinite; }
+  .ceu .camada + .camada { animation-delay: -1.8s; }
+  @keyframes pisca { 50% { opacity: .3; } }
+  :root:not([data-theme="dark"]) .ceu .camada { animation-play-state: paused; }
 
   .pagina {
     position: relative; z-index: 1;
@@ -186,7 +196,7 @@
     background: linear-gradient(100deg, var(--tinta) 0 42%, var(--acento) 50%, var(--tinta) 58% 100%);
     background-size: 260% 100%; background-position: 100% 0;
     -webkit-background-clip: text; background-clip: text; color: transparent;
-    animation: brilho-texto 5s ease-in-out 1.2s infinite;
+    animation: brilho-texto 5s ease-in-out 1.2s 1; /* uma passada só: animar o fundo do texto redesenha o título */
   }
   @keyframes brilho-texto { 0% { background-position: 100% 0; } 45%, 100% { background-position: 0 0; } }
   .apresentacao p { margin: 8px 0 0; font-size: .95rem; color: var(--tinta-2); }
@@ -203,12 +213,13 @@
   /* ---------- Links: cards de vidro ---------- */
   .secao-titulo { margin: 6px 4px -6px; font-size: .74rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--tinta-2); }
   .links { display: flex; flex-direction: column; gap: 12px; }
+  /* vidro "simulado": o fundo atrás dos cards é só degradê suave, então um degradê translúcido
+     com borda e brilho interno fica igual ao desfoque real — e custa quase nada ao celular */
   .vidro {
     position: relative; overflow: hidden;
-    background: var(--vidro);
+    background: linear-gradient(135deg, var(--vidro-a), var(--vidro-b)), var(--vidro-base);
     border: 1px solid var(--vidro-borda);
-    -webkit-backdrop-filter: blur(12px) saturate(160%); backdrop-filter: blur(12px) saturate(160%);
-    box-shadow: var(--sombra), inset 0 1px 0 var(--vidro-brilho);
+    box-shadow: var(--sombra), inset 0 1px 0 var(--vidro-brilho), inset 0 -1px 0 rgba(255,255,255,.06);
   }
   .card-link {
     display: flex; align-items: center; gap: 14px;
@@ -217,15 +228,15 @@
   }
   /* reflexo que passa sozinho pelo vidro, de tempos em tempos */
   .card-link::before {
-    content: ''; position: absolute; top: 0; bottom: 0; left: -60%; width: 50%;
+    content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 50%;
     background: linear-gradient(100deg, transparent, rgba(255,255,255,.35), transparent);
-    transform: skewX(-18deg); pointer-events: none;
+    transform: translateX(-120%) skewX(-18deg); pointer-events: none; will-change: transform;
     animation: reflexo 5s ease-in-out 1.5s infinite;
   }
   .card-link:nth-child(2)::before { animation-delay: 2.1s; }
   .card-link:nth-child(3)::before { animation-delay: 2.7s; }
   .card-link:nth-child(4)::before { animation-delay: 3.3s; }
-  @keyframes reflexo { 0% { left: -60%; } 22%, 100% { left: 130%; } }
+  @keyframes reflexo { 0% { transform: translateX(-120%) skewX(-18deg); } 22%, 100% { transform: translateX(260%) skewX(-18deg); } }
   .card-link:active { scale: .98; }
   .card-link:focus-visible { outline: 3px solid var(--acento); outline-offset: 3px; }
   .card-ico { width: 48px; height: 48px; border-radius: 15px; display: grid; place-items: center; flex-shrink: 0; color: #fff; }
@@ -287,9 +298,6 @@
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
     .revela, .ass-letras span, .ass-foto { opacity: 1 !important; translate: none !important; }
-  }
-  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .vidro { background: color-mix(in srgb, var(--fundo-2) 88%, transparent); }
   }
 </style>
 </head>
@@ -444,13 +452,23 @@
     }).catch(function () {});
   });
 
-  // Estrelas do modo escuro
+  // Estrelas do modo escuro: 2 imagens desenhadas uma única vez (30 estrelas cada)
   var ceu = document.getElementById('ceu');
-  for (var i = 0; i < 60; i++) {
-    var e = document.createElement('i');
-    var s = Math.random() < .2 ? 3 : 2;
-    e.style.cssText = 'left:' + (Math.random() * 100) + '%;top:' + (Math.random() * 100) + '%;width:' + s + 'px;height:' + s + 'px;animation-delay:' + (Math.random() * 3.5) + 's;opacity:' + (.4 + Math.random() * .6);
-    ceu.appendChild(e);
+  var dpr = Math.min(2, window.devicePixelRatio || 1);
+  for (var c = 0; c < 2; c++) {
+    var tela = document.createElement('canvas');
+    tela.width = Math.round(innerWidth * dpr); tela.height = Math.round(innerHeight * dpr);
+    var g = tela.getContext('2d');
+    for (var i = 0; i < 30; i++) {
+      var raioE = (Math.random() < .2 ? 1.5 : 1) * dpr;
+      g.globalAlpha = .4 + Math.random() * .6;
+      g.fillStyle = '#fff';
+      g.beginPath(); g.arc(Math.random() * tela.width, Math.random() * tela.height, raioE, 0, Math.PI * 2); g.fill();
+    }
+    var camada = document.createElement('div');
+    camada.className = 'camada';
+    camada.style.backgroundImage = 'url(' + tela.toDataURL('image/png') + ')';
+    ceu.appendChild(camada);
   }
 
   document.getElementById('ano').textContent = new Date().getFullYear();
