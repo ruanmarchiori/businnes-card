@@ -280,6 +280,10 @@
   html.trocando-tema *:not(.tema):not(.tema *),
   html.trocando-tema *:not(.tema):not(.tema *)::before,
   html.trocando-tema *:not(.tema):not(.tema *)::after { transition: none !important; }
+  /* View Transition: o navegador monta a tela nova inteira por trás e revela de uma vez
+     (um círculo abrindo a partir do botão). Evita ver a tela mudar "por partes" no iPhone. */
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+  ::view-transition-new(root) { z-index: 2; }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
     .revela, .ass-letras span, .ass-foto { opacity: 1 !important; translate: none !important; }
@@ -419,11 +423,25 @@
     if (salvar) { try { localStorage.setItem('bio-tema', t); } catch (e) {} }
   }
   aplicar(raiz.dataset.theme, false);
-  botao.addEventListener('click', function () {
+  function trocar() {
     raiz.classList.add('trocando-tema');
     aplicar(raiz.dataset.theme === 'dark' ? 'light' : 'dark', true);
     // devolve as transições depois que a nova cor já foi pintada
     requestAnimationFrame(function () { requestAnimationFrame(function () { raiz.classList.remove('trocando-tema'); }); });
+  }
+  botao.addEventListener('click', function () {
+    var calmoAgora = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!document.startViewTransition || calmoAgora) { trocar(); return; }
+    var r = botao.getBoundingClientRect();
+    var x = r.left + r.width / 2, y = r.top + r.height / 2;
+    var raio = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    var vt = document.startViewTransition(trocar);
+    vt.ready.then(function () {
+      raiz.animate(
+        { clipPath: ['circle(0px at ' + x + 'px ' + y + 'px)', 'circle(' + raio + 'px at ' + x + 'px ' + y + 'px)'] },
+        { duration: 520, easing: 'cubic-bezier(.4,0,.2,1)', pseudoElement: '::view-transition-new(root)' }
+      );
+    }).catch(function () {});
   });
 
   // Estrelas do modo escuro
