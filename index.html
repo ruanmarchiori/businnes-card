@@ -238,12 +238,14 @@
   .card-link:nth-child(2)::before { animation-delay: 2.1s; }
   .card-link:nth-child(3)::before { animation-delay: 2.7s; }
   .card-link:nth-child(4)::before { animation-delay: 3.3s; }
+  .card-link:nth-child(5)::before { animation-delay: 3.9s; }
   @keyframes reflexo { 0% { transform: translateX(-120%) skewX(-18deg); } 22%, 100% { transform: translateX(260%) skewX(-18deg); } }
   .card-link:active { scale: .98; }
   .card-link:focus-visible { outline: 3px solid var(--acento); outline-offset: 3px; }
   .card-ico { width: 48px; height: 48px; border-radius: 15px; display: grid; place-items: center; flex-shrink: 0; color: #fff; }
   .card-ico.insta { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285aeb 90%); }
   .card-ico.atlas { background: #0b7fa8; overflow: hidden; }
+  .card-ico.assistente { background: linear-gradient(145deg, #9b7bff, #c8343f 55%, #ff8a3d); }
   .card-ico.agencia { border-radius: 50%; }
   .card-ico.site { overflow: hidden; }
   .card-ico.site img, .card-ico.agencia img { width: 100%; height: 100%; display: block; }
@@ -401,6 +403,18 @@
         <span class="card-texto">
           <strong>Atlas Anatomia</strong>
           <small>Atlas 3D do corpo humano</small>
+        </span>
+        <span class="card-seta" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+      <a class="card-link vidro revela" style="--atraso:.6s" href="https://ruanmarchiori.github.io/pc-assistant/">
+        <span class="card-ico assistente" aria-hidden="true">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="3.5"/><path d="M8.5 5v9M15.5 5v9M6 16.5h12"/></svg>
+        </span>
+        <span class="card-texto">
+          <strong>Assistente de PC</strong>
+          <small>Veja a demonstração</small>
         </span>
         <span class="card-seta" aria-hidden="true">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
